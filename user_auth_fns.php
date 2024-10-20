@@ -27,38 +27,6 @@ function user_exists($username) {
     return $result->num_rows > 0; // Return true or false
 }
 
-// Function to handle user login
-function login($username, $password) {
-    // Connect to the database
-    $conn = db_connect();
-
-    // Secure against SQL injection
-    $username = mysqli_real_escape_string($conn, $username);
-
-    // Retrieve user information
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $conn->query($query);
-
-    if (!$result) {
-        throw new Exception("Could not execute query");
-    }
-
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-
-        // Verify the hashed password
-        if (password_verify($password, $user['password'])) {
-            // Set session for the valid user
-            $_SESSION['valid_user'] = $username;
-            $_SESSION['user_id'] = $user['id']; // Assuming 'id' is the primary key
-            return true;
-        } else {
-            throw new Exception("Invalid password.");
-        }
-    } else {
-        throw new Exception("User does not exist.");
-    }
-}
 
 // Add any other functions related to user authentication here
 ?>
