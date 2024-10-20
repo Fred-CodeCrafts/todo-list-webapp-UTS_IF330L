@@ -46,5 +46,20 @@ function logout() {
 
     session_destroy(); // Destroy the session
 }
+function login($username, $password) {
+    $conn = db_connect();
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = SHA1(?)");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // User is found, login successful
+        return true;
+    } else {
+        throw new Exception('Old password is incorrect.');
+    }
+}
+
 
 ?>
