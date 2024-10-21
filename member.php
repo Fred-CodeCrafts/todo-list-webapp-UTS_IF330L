@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Task Management App</title>
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
 </head>
 <body class="bg-gray-100">
 
@@ -29,11 +30,27 @@ $username = $_SESSION['valid_user'];
 $user_id = $_SESSION['user_id']; // Retrieve user_id from session
 
 echo "<div class='max-w-screen-sm mx-auto p-4 bg-white rounded-lg shadow-md'>"; // Center and narrow content
-echo "<h2 class='text-2xl font-bold mb-4'>Welcome, $username!</h2>";
-echo '<a href="logout.php" class="text-blue-500 hover:text-blue-700 underline">Logout</a>';
-echo '<h3 class="text-xl font-semibold mt-4"><a href="profile.php" class="text-blue-500 hover:text-blue-700 underline">View Profile</a></h3>'; // Link to Profile Page
-echo '<h3 class="text-lg font-semibold mt-6">Your Tasks</h3>';
+echo "<div class='flex justify-between items-center mb-4'>"; // Flex container for row alignment
+echo "<h2 class='text-2xl font-bold'>Welcome, $username!</h2>";
+echo "<div class='flex items-center'>"; // Wrap profile image and logout in a div for grouping
+
+// Set profile image to default if not available
+$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
+    ? 'images/profile_images/' . $user_profile['profile_image'] 
+    : 'images/profile_images/default.jpg';
+
+// Replace 'View Profile' link with profile image
+echo "<a href='profile.php' class='block mr-4'>
+        <img src='$profile_image' alt='Profile Image' class='w-10 h-10 rounded-full object-cover'>
+      </a>";
+
+echo "<a href='logout.php' class='text-blue-500 hover:text-blue-700 underline'>Logout</a>";
+echo "</div>";
+echo "</div>"; // Close flex container
+echo "<h3 class='text-lg font-semibold mt-6'>Your Tasks</h3>";
+
 ?>
+
 
 <!-- Task Filter and Search -->
 <div class="flex flex-col sm:flex-row items-center mt-4 space-y-2 sm:space-y-0 sm:space-x-4">
@@ -49,8 +66,8 @@ echo '<h3 class="text-lg font-semibold mt-6">Your Tasks</h3>';
 </div>
 
 <?php
-// Use user_id to retrieve tasks
-$result = $conn->query("SELECT task_id, task_description, is_completed, task_type FROM tasks WHERE user_id='$user_id'");
+// Use user_id to retrieve tasks, including due_date
+$result = $conn->query("SELECT task_id, task_description, is_completed, task_type, due_date FROM tasks WHERE user_id='$user_id'");
 
 if ($result->num_rows > 0) {
     echo '<ul id="taskList" class="mt-4 space-y-4">';
@@ -58,12 +75,20 @@ if ($result->num_rows > 0) {
         $status = $row['is_completed'] ? 'completed' : 'pending';
         $task_type = $row['task_type'];
         $task_image = $task_types[$task_type]; // Get the image for the task type
-        
+        $due_date = date('F j, Y', strtotime($row['due_date'])); // Format the due date
+
+        // Font Awesome icons for completed and pending statuses
+        $status_icon = $row['is_completed'] ? '<i class="fas fa-check-circle text-green-500"></i>' : '<i class="fas fa-clock text-yellow-500"></i>';
+
+        // Display task description, due date, and status
         echo "<li class='task-item flex items-center space-x-4 p-4 border border-gray-300 rounded-md' data-task='{$row['task_description']}' data-status='$status'>
                 <img src='images/$task_image' alt='$task_type' class='w-6 h-6'> <!-- Image for task type -->
-                <span class='flex-1'>{$row['task_description']} - " . ($row['is_completed'] ? 'Completed' : 'Pending') . "</span>
-                <a href='update_task.php?id={$row['task_id']}' class='text-blue-500 hover:underline'>Edit</a>
-                <a href='delete_task.php?id={$row['task_id']}' class='text-red-500 hover:underline'>Delete</a>
+                <span class='flex-1'>{$row['task_description']} - Due: $due_date</span>
+                <div class='flex items-center space-x-2'>
+                    $status_icon
+                    <a href='update_task.php?id={$row['task_id']}' class='text-blue-500 hover:underline'>Edit</a>
+                    <a href='delete_task.php?id={$row['task_id']}' class='text-red-500 hover:underline'>Delete</a>
+                </div>
               </li>";
     }
     echo '</ul>';

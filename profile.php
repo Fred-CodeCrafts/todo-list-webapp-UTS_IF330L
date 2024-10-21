@@ -16,6 +16,11 @@ if (!$user_profile) {
     exit();
 }
 
+// Set profile image to default if not available
+$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
+    ? 'images/profile_images/' . $user_profile['profile_image'] 
+    : 'images/profile_images/default.jpg';
+
 // Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['change_password'])) {
     // Sanitize user input
@@ -51,12 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
 </head>
-<body class="bg-[#213a45] h-screen flex items-center justify-center">
+<body class="bg-[#213a45] min-h-screen flex justify-center">
 
 <div class="container mx-auto max-w-md p-6 bg-white rounded-lg shadow-lg">
     <h2 class="text-center text-2xl font-semibold mb-6 text-gray-800">Your Profile</h2>
     
+    <div class="text-center mb-6">
+        <img src="<?php echo $profile_image; ?>" alt="Profile Image" class="w-32 h-32 rounded-full mb-4 mx-auto object-cover">
+    </div>
+
     <form action="profile.php" method="post" class="flex flex-col mb-8">
         <label for="username" class="text-sm text-gray-600 mb-1">Username:</label>
         <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_profile['username']); ?>" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
@@ -65,6 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
         <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_profile['email']); ?>" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
 
         <input type="submit" value="Update Profile" class="bg-[#51839a] text-white rounded-md p-2 w-full hover:bg-[#86d5f8] transition duration-300 cursor-pointer">
+    </form>    
+
+    <!-- Form to Upload Profile Image -->
+    <h3 class="text-lg font-semibold mb-4 text-gray-800">Upload Profile Image</h3>
+    <form action="upload_image.php" method="post" enctype="multipart/form-data" class="flex flex-col mb-8">
+        <label for="profile_image" class="text-sm text-gray-600 mb-1">Profile Image:</label>
+        <input type="file" id="profile_image" name="profile_image" class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+
+        <input type="submit" value="Upload Image" class="bg-[#51839a] text-white rounded-md p-2 w-full hover:bg-[#86d5f8] transition duration-300 cursor-pointer">
     </form>    
 
     <h3 class="text-lg font-semibold mb-4 text-gray-800">Change Password</h3>
