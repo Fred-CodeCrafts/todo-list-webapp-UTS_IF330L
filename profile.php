@@ -56,48 +56,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #213a45; /* Dark background */
+        }
+    </style>
 </head>
-<body class="bg-[#213a45] min-h-screen flex justify-center">
+<body class="flex justify-center items-center min-h-screen">
 
-<div class="container mx-auto max-w-md p-6 bg-white rounded-lg shadow-lg">
-    <h2 class="text-center text-2xl font-semibold mb-6 text-gray-800">Your Profile</h2>
+<div class="container mx-auto bg-[#2b4d5a] rounded-lg shadow-lg p-8 max-w-lg text-center">
+    <h2 class="text-3xl font-semibold text-[#86d5f8] mb-6">Your Profile</h2>
     
     <div class="text-center mb-6">
         <img src="<?php echo $profile_image; ?>" alt="Profile Image" class="w-32 h-32 rounded-full mb-4 mx-auto object-cover">
     </div>
 
     <form action="profile.php" method="post" class="flex flex-col mb-8">
-        <label for="username" class="text-sm text-gray-600 mb-1">Username:</label>
-        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_profile['username']); ?>" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+        <label for="username" class="text-sm text-white mb-1">Username:</label>
+        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_profile['username']); ?>" required class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
 
-        <label for="email" class="text-sm text-gray-600 mb-1">Email:</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_profile['email']); ?>" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+        <label for="email" class="text-sm text-white mb-1">Email:</label>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_profile['email']); ?>" required class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
 
-        <input type="submit" value="Update Profile" class="bg-[#51839a] text-white rounded-md p-2 w-full hover:bg-[#86d5f8] transition duration-300 cursor-pointer">
+        <input type="submit" value="Update Profile" class="bg-[#86d5f8] text-[#213a45] rounded-md p-2 w-full font-bold transition duration-300 cursor-pointer hover:bg-[#51839a]">
     </form>    
 
     <!-- Form to Upload Profile Image -->
-    <h3 class="text-lg font-semibold mb-4 text-gray-800">Upload Profile Image</h3>
+    <h3 class="text-lg font-semibold mb-4 text-[#86d5f8]">Upload Profile Image</h3>
     <form action="upload_image.php" method="post" enctype="multipart/form-data" class="flex flex-col mb-8">
-        <label for="profile_image" class="text-sm text-gray-600 mb-1">Profile Image:</label>
-        <input type="file" id="profile_image" name="profile_image" class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+        <input type="file" id="profile_image" name="profile_image" class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
 
-        <input type="submit" value="Upload Image" class="bg-[#51839a] text-white rounded-md p-2 w-full hover:bg-[#86d5f8] transition duration-300 cursor-pointer">
+        <input type="submit" value="Upload Image" class="bg-[#86d5f8] text-[#213a45] rounded-md p-2 w-full font-bold transition duration-300 cursor-pointer hover:bg-[#51839a]">
     </form>    
 
-    <h3 class="text-lg font-semibold mb-4 text-gray-800">Change Password</h3>
+    <h3 class="text-lg font-semibold mb-4 text-[#86d5f8]">Change Password</h3>
     <form action="profile.php" method="post" class="flex flex-col">
-        <label for="old_password" class="text-sm text-gray-600 mb-1">Old Password:</label>
-        <input type="password" id="old_password" name="old_password" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+        <label for="old_password" class="text-sm text-white mb-1">Old Password:</label>
+        <input type="password" id="old_password" name="old_password" required class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
 
-        <label for="new_password" class="text-sm text-gray-600 mb-1">New Password:</label>
-        <input type="password" id="new_password" name="new_password" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#51839a]">
+        <label for="new_password" class="text-sm text-white mb-1">New Password:</label>
+        <input type="password" id="new_password" name="new_password" required class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
 
-        <input type="submit" name="change_password" value="Change Password" class="bg-[#51839a] text-white rounded-md p-2 w-full hover:bg-[#86d5f8] transition duration-300 cursor-pointer">
+        <input type="submit" name="change_password" value="Change Password" class="bg-[#86d5f8] text-[#213a45] rounded-md p-2 w-full font-bold transition duration-300 cursor-pointer hover:bg-[#51839a]">
     </form>
     
-    <div class="mt-6 text-center">
-        <a href="member.php" class="text-sm text-blue-600 hover:underline">Back to Tasks</a>
+    <div class="mt-6">
+        <a href="member.php" class="text-sm text-[#86d5f8] hover:underline">Back to Tasks</a>
     </div>
 </div>
 
