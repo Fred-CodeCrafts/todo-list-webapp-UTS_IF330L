@@ -18,7 +18,7 @@ if (!$user_profile) {
 
 // Set profile image to default if not available
 $profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
-    ? 'images/profile_images/' . $user_profile['profile_image'] 
+    ? 'uploads/profile_images/' . $user_profile['profile_image'] 
     : 'images/profile_images/default.jpg';
 
 // Handle profile update
@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
 </head>
 <body class="bg-[#213a45] min-h-screen flex justify-center">
 

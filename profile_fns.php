@@ -4,7 +4,7 @@ require_once('db_fns.php');
 // Function to fetch user profile information
 function get_user_profile($user_id) {
     $conn = db_connect();
-    $stmt = $conn->prepare("SELECT username, email FROM users WHERE user_id = ?");
+    $stmt = $conn->prepare("SELECT username, email, profile_image FROM users WHERE user_id = ?");
     $stmt->bind_param('i', $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -49,10 +49,6 @@ function change_password($username, $old_password, $new_password) {
     $row = $result->fetch_assoc();
     $hashed_password = $row['password'];
 
-    // Debugging: Check the hashed password and old password
-    var_dump($hashed_password); // Show hashed password for debugging
-    var_dump($old_password);     // Show user input for old password
-
     // Verify the old password
     if (!password_verify($old_password, $hashed_password)) {
         throw new Exception('Old password is incorrect.');
@@ -69,7 +65,4 @@ function change_password($username, $old_password, $new_password) {
 
     return true; // Password changed successfully
 }
-
-
 ?>
-

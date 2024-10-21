@@ -29,15 +29,19 @@ $conn = db_connect();
 $username = $_SESSION['valid_user'];
 $user_id = $_SESSION['user_id']; // Retrieve user_id from session
 
+// Fetch the user profile data, including the profile image
+$result = $conn->query("SELECT profile_image FROM users WHERE user_id='$user_id'");
+$user_profile = $result->fetch_assoc();
+
+// Set profile image to default if not available
+$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
+    ? 'uploads/profile_images/' . $user_profile['profile_image'] 
+    : 'images/profile_images/default.jpg';
+
 echo "<div class='max-w-screen-sm mx-auto p-4 bg-white rounded-lg shadow-md'>"; // Center and narrow content
 echo "<div class='flex justify-between items-center mb-4'>"; // Flex container for row alignment
 echo "<h2 class='text-2xl font-bold'>Welcome, $username!</h2>";
 echo "<div class='flex items-center'>"; // Wrap profile image and logout in a div for grouping
-
-// Set profile image to default if not available
-$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
-    ? 'images/profile_images/' . $user_profile['profile_image'] 
-    : 'images/profile_images/default.jpg';
 
 // Replace 'View Profile' link with profile image
 echo "<a href='profile.php' class='block mr-4'>
@@ -48,9 +52,7 @@ echo "<a href='logout.php' class='text-blue-500 hover:text-blue-700 underline'>L
 echo "</div>";
 echo "</div>"; // Close flex container
 echo "<h3 class='text-lg font-semibold mt-6'>Your Tasks</h3>";
-
 ?>
-
 
 <!-- Task Filter and Search -->
 <div class="flex flex-col sm:flex-row items-center mt-4 space-y-2 sm:space-y-0 sm:space-x-4">
@@ -131,6 +133,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskSearch = document.getElementById('taskSearch');
     const taskItems = document.querySelectorAll('.task-item');
 
+    // Set the min attribute of the due date input to today's date
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelector('input[name="due_date"]').setAttribute('min', today);
+
     // Function to filter tasks by status
     function filterTasks() {
         const filterValue = statusFilter.value;
@@ -166,10 +172,10 @@ document.addEventListener('DOMContentLoaded', function () {
         background-color: #fff; /* White background for even tasks */
     }
 
-    input[type="submit"]:hover {
-        background-color: #51839a; /* Button color on hover */
+    .task-item:hover {
+        transform: scale(1.02); /* Slightly enlarge on hover */
+        transition: transform 0.2s;
     }
 </style>
-
 </body>
 </html>
