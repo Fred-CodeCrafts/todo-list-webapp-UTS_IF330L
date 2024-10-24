@@ -5,29 +5,24 @@ session_start();
 
 check_valid_user();
 
-$id = (int)$_GET['id']; // Cast to integer for security
+$id = (int)$_GET['id']; 
 $conn = db_connect();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Use the correct column name based on your database structure
-    $task_description = htmlspecialchars($_POST['task']); // Updated variable name
+    $task_description = htmlspecialchars($_POST['task']); 
     $due_date = $_POST['due_date'];
     
-    // Determine if the task is completed based on the checkbox
-    $is_completed = isset($_POST['is_completed']) ? 1 : 0; // 1 for completed, 0 for not completed
+    $is_completed = isset($_POST['is_completed']) ? 1 : 0; 
 
-    // Update query with the correct column names
     $stmt = $conn->prepare("UPDATE tasks SET task_description = ?, due_date = ?, is_completed = ? WHERE task_id = ?");
-    $stmt->bind_param('ssii', $task_description, $due_date, $is_completed, $id); // Updated variable names
-
+    $stmt->bind_param('ssii', $task_description, $due_date, $is_completed, $id); 
     if ($stmt->execute()) {
-        header('Location: member.php');
-        exit; // Stop further execution
+        header('Location: list.php');
+        exit; 
     } else {
-        echo "Error updating task: " . $stmt->error; // Use $stmt->error for the prepared statement
+        echo "Error updating task: " . $stmt->error; 
     }
 } else {
-    // Fetch the task using the correct column name
     $result = $conn->query("SELECT * FROM tasks WHERE task_id = $id");
     $task = $result->fetch_assoc();
 
@@ -46,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             background-color: #213a45;
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', monospace; /* Changed to Courier New */
             margin: 0;
             padding: 0;
             display: flex;
@@ -136,9 +131,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
+<script>
+// Set the minimum date for the due date input to today
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('due_date').setAttribute('min', today);
+});
+</script>
+
 </body>
 </html>
 
 <?php 
-} // End of else for the GET request
+} 
 ?>

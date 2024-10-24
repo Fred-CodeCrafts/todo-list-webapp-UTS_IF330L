@@ -4,30 +4,24 @@ require_once('profile_fns.php');
 
 session_start();
 
-// Check if the user is logged in
 check_valid_user();
 
-$user_id = $_SESSION['user_id']; // Get the user ID from the session
+$user_id = $_SESSION['user_id'];
 
-// Fetch user profile information
 $user_profile = get_user_profile($user_id);
 if (!$user_profile) {
     echo 'User not found.';
     exit();
 }
 
-// Set profile image to default if not available
-$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
+$profile_image = isset($user_profile['profile_image']) && $user_profile['profile_image'] !== 'default.png' 
     ? 'uploads/profile_images/' . $user_profile['profile_image'] 
-    : 'images/profile_images/default.jpg';
+    : 'images/profile_images/default.png';
 
-// Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['change_password'])) {
-    // Sanitize user input
     $new_username = htmlspecialchars(trim($_POST['username']));
     $new_email = htmlspecialchars(trim($_POST['email']));
     
-    // Update user profile
     if (update_user_profile($user_id, $new_username, $new_email)) {
         echo 'Profile updated successfully. <a href="profile.php">View Profile</a>';
     } else {
@@ -35,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['change_password'])) 
     }
 }
 
-// Handle password change
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];
@@ -58,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-color: #213a45; /* Dark background */
+            background-color: #213a45;
+            font-family: 'Courier New', Courier, monospace; /* Change font to Courier */
         }
     </style>
 </head>
@@ -81,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
         <input type="submit" value="Update Profile" class="bg-[#86d5f8] text-[#213a45] rounded-md p-2 w-full font-bold transition duration-300 cursor-pointer hover:bg-[#51839a]">
     </form>    
 
-    <!-- Form to Upload Profile Image -->
     <h3 class="text-lg font-semibold mb-4 text-[#86d5f8]">Upload Profile Image</h3>
     <form action="upload_image.php" method="post" enctype="multipart/form-data" class="flex flex-col mb-8">
         <input type="file" id="profile_image" name="profile_image" class="p-2 border border-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
@@ -101,9 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </form>
     
     <div class="mt-6">
-        <a href="member.php" class="text-sm text-[#86d5f8] hover:underline">Back to Tasks</a>
+        <a href="list.php" class="text-sm text-[#86d5f8] hover:underline">Back to Tasks</a>
     </div>
 </div>
-
 </body>
 </html>

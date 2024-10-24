@@ -1,5 +1,4 @@
 <?php
-// task_types.php
 
 $task_types = [
     'work' => 'work_icon.gif',
