@@ -14,7 +14,7 @@ if (!$user_profile) {
     exit();
 }
 
-$profile_image = isset($user_profile['profile_image']) && $user_profile['profile_image'] !== 'default.png' 
+$profile_image = isset($user_profile['profile_image']) && !empty($user_profile['profile_image']) 
     ? 'uploads/profile_images/' . $user_profile['profile_image'] 
     : 'images/profile_images/default.png';
 
