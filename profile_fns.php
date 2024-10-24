@@ -60,4 +60,40 @@ function change_password($username, $old_password, $new_password) {
 
     return true; 
 }
+
+function upload_profile_image($user_id, $file) {
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $upload_dir = 'uploads/profile_images/'; 
+    $max_file_size = 2 * 1024 * 1024; 
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new Exception('Error during file upload.');
+    }
+
+    if ($file['size'] > $max_file_size) {
+        throw new Exception('File size exceeds 2 MB.');
+    }
+
+    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($file_extension, $allowed_extensions)) {
+        throw new Exception('Invalid file type. Only JPG, PNG, and GIF are allowed.');
+    }
+
+    $file_name = uniqid('profile_', true) . '.' . $file_extension;
+    $file_path = $upload_dir . $file_name;
+
+    if (!move_uploaded_file($file['tmp_name'], $file_path)) {
+        throw new Exception('Failed to move uploaded file.');
+    }
+
+    $conn = db_connect();
+    $stmt = $conn->prepare("UPDATE users SET profile_image = ? WHERE user_id = ?");
+    $stmt->bind_param('si', $file_name, $user_id);
+    $success = $stmt->execute();
+
+    $stmt->close();
+    $conn->close();
+
+    return $success;
+}
 ?>
