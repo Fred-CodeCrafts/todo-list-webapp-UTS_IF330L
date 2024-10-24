@@ -30,15 +30,15 @@ try {
             header('Location: list.php');
             exit();
         } else {
-            echo 'User ID not found. <a href="login_form.php">Try again</a>';
+            echo 'User ID not found. <a href="index.php">Try again</a>';
         }
 
         $stmt->close();
         $conn->close();
     } else {
-        echo 'Login failed. <a href="login_form.php">Try again</a>';
+        echo 'Login failed. <a href="index.php">Try again</a>';
     }
 } catch (Exception $e) {
-    echo 'Error: ' . $e->getMessage() . '. <a href="login_form.php">Try again</a>';
+    echo 'Error: ' . $e->getMessage() . '. <a href="index.php">Try again</a>';
 }
 ?>
