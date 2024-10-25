@@ -19,15 +19,18 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPL
     $max_file_size = 2 * 1024 * 1024; 
 
     if ($file_name === 'default.png') {
-        die("Please rename your file.");
+        echo "<script>alert('Please rename your file.'); window.history.back();</script>";
+        exit;
     }
 
     if (!in_array($file_extension, $allowed_extensions)) {
-        die("Invalid file type. Only JPG, PNG, and GIF are allowed.");
+        echo "<script>alert('Invalid file type. Only JPG, PNG, and GIF are allowed.'); window.history.back();</script>";
+        exit;
     }
 
     if ($_FILES['profile_image']['size'] > $max_file_size) {
-        die("File size exceeds 2 MB limit.");
+        echo "<script>alert('File size exceeds 2 MB limit.'); window.history.back();</script>";
+        exit;
     }
 
     if (!is_dir($upload_dir)) {
@@ -36,15 +39,15 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPL
 
     if (move_uploaded_file($file_tmp, $upload_path)) {
         if (update_profile_image($user_id, $file_name)) {
-            echo "Profile image uploaded successfully. <a href='profile.php'>View Profile</a>";
+            echo "<script>alert('Profile image uploaded successfully.'); window.location.href='profile.php';</script>";
         } else {
-            echo "Failed to update profile image in the database.";
+            echo "<script>alert('Failed to update profile image in the database.'); window.history.back();</script>";
         }
     } else {
-        echo "Failed to move uploaded file.";
+        echo "<script>alert('Failed to move uploaded file.'); window.history.back();</script>";
     }
 } else {
-    echo "File upload error: " . $_FILES['profile_image']['error'];
+    echo "<script>alert('File upload error: " . $_FILES['profile_image']['error'] . "'); window.history.back();</script>";
 }
 
 function update_profile_image($user_id, $file_name) {

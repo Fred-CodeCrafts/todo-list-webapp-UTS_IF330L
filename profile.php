@@ -10,7 +10,7 @@ $user_id = $_SESSION['user_id'];
 
 $user_profile = get_user_profile($user_id);
 if (!$user_profile) {
-    echo 'User not found.';
+    echo "<script>alert('User not found.'); window.location.href='index.php';</script>";
     exit();
 }
 
@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['change_password'])) 
     $new_email = htmlspecialchars(trim($_POST['email']));
     
     if (update_user_profile($user_id, $new_username, $new_email)) {
-        echo 'Profile updated successfully. <a href="profile.php">View Profile</a>';
+        echo "<script>alert('Profile updated successfully.'); window.location.href='profile.php';</script>";
     } else {
-        echo 'Error updating profile.';
+        echo "<script>alert('Error updating profile.'); window.location.href='profile.php';</script>";
     }
 }
 
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 
     try {
         change_password($user_profile['username'], $old_password, $new_password);
-        echo '<p>Password changed successfully.</p>';
+        echo "<script>alert('Password changed successfully.'); window.location.href='profile.php';</script>";
     } catch (Exception $e) {
-        echo '<p>Error: ' . $e->getMessage() . '</p>';
+        echo "<script>alert('Error: " . addslashes($e->getMessage()) . "'); window.location.href='profile.php';</script>";
     }
 }
 ?>

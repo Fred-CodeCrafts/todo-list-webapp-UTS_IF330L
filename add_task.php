@@ -6,7 +6,7 @@ session_start();
 check_valid_user();
 
 if (!isset($_SESSION['user_id'])) {
-    echo 'User ID is not set in the session.';
+    echo "<script>alert('User ID is not set in the session.'); window.location.href='index.php';</script>";
     exit();  
 }
 
@@ -25,15 +25,14 @@ if (isset($_POST['task']) && isset($_POST['due_date']) && isset($_POST['task_typ
     $stmt->bind_param('isss', $user_id, $task, $due_date, $task_type);
 
     if ($stmt->execute()) {
-        echo 'Task added successfully. <a href="list.php">Back to tasks</a>';
+        echo "<script>alert('Task added successfully.'); window.location.href='list.php';</script>";
     } else {
-        echo 'Error adding task: ' . $stmt->error;
+        echo "<script>alert('Error adding task: " . addslashes($stmt->error) . ".'); window.location.href='list.php';</script>";
     }
 
     $stmt->close();
     $conn->close();
 } else {
-    echo 'Task, due date, and task type are required.';
+    echo "<script>alert('Task, due date, and task type are required.'); window.location.href='index.php';</script>";
 }
-
 ?>

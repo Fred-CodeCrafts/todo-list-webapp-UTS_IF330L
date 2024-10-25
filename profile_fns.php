@@ -47,9 +47,10 @@ function change_password($username, $old_password, $new_password) {
     $hashed_password = $row['password'];
 
     if (!password_verify($old_password, $hashed_password)) {
-        throw new Exception('Old password is incorrect.');
+        echo "<script>alert('Old password is incorrect.'); window.history.back();</script>";
+        exit();
     }
-
+    
     $new_hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
     $update_stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
     $update_stmt->bind_param("ss", $new_hashed_password, $username);

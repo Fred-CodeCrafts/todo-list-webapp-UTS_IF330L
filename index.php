@@ -51,6 +51,7 @@
             document.querySelector('.form-container').classList.add('show');
         }
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> <!-- Add this line -->
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center notebook-bg">
 
@@ -70,6 +71,8 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'register') {
             
             <label class="text-sm text-gray-600 mb-1">Password</label>
             <input type="password" name="password" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
+
+            <div class="g-recaptcha" data-sitekey="6Lfl4msqAAAAAPaz2uVIgU_4Ezookz_92TcyiFo5"></div>
             
             <input type="submit" value="Login" class="bg-[#86d5f8] text-white rounded-md p-2 w-full hover-normal cursor-pointer">
         </form>
@@ -90,6 +93,8 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'register') {
             
             <label class="text-sm text-gray-600 mb-1">Confirm Password</label>
             <input type="password" name="confirm_password" required class="p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#86d5f8]">
+            
+            <div class="g-recaptcha" data-sitekey="6Lfl4msqAAAAAPaz2uVIgU_4Ezookz_92TcyiFo5"></div>
             
             <input type="submit" value="Register" class="bg-[#86d5f8] text-white rounded-md p-2 w-full hover-normal cursor-pointer">
         </form>

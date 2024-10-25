@@ -7,6 +7,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$recaptcha_secret = '6Lfl4msqAAAAAK3DewQmLHxEG3gqNfOuOcCt1bSL'; 
+$recaptcha_response = $_POST['g-recaptcha-response'];
+
+$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
+$response_keys = json_decode($response, true);
+
+if (intval($response_keys["success"]) !== 1) {
+    echo "<script>alert('Please complete the CAPTCHA.'); window.location.href='index.php';</script>";
+    exit();
+}
+
 $username = htmlspecialchars(trim($_POST['username']));
 $password = htmlspecialchars(trim($_POST['password']));
 
@@ -24,21 +35,20 @@ try {
             $_SESSION['valid_user'] = $username;
             $_SESSION['user_id'] = $row['user_id'];
 
-            echo "Username: " . $_SESSION['valid_user'] . "<br>";
-            echo "User ID: " . $_SESSION['user_id'] . "<br>";
-            
-            header('Location: list.php');
+            echo "<script>
+            window.location.href='list.php';
+            </script>";
             exit();
         } else {
-            echo 'User ID not found. <a href="index.php">Try again</a>';
+            echo "<script>alert('User ID not found. Please try again.'); window.location.href='index.php';</script>";
         }
 
         $stmt->close();
         $conn->close();
     } else {
-        echo 'Login failed. <a href="index.php">Try again</a>';
+        echo "<script>alert('Login failed. Please check your username and password.'); window.location.href='index.php';</script>";
     }
 } catch (Exception $e) {
-    echo 'Error: ' . $e->getMessage() . '. <a href="index.php">Try again</a>';
+    echo "<script>alert('Error: " . addslashes($e->getMessage()) . ". Please try again.'); window.location.href='index.php';</script>";
 }
 ?>
