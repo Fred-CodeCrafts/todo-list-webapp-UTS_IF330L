@@ -79,6 +79,9 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'register') {
         <div class="text-center mt-4">
             <a href="javascript:void(0);" onclick="switchMode('?mode=register')" class="text-sm text-blue-600 hover:underline">Don't have an account? Register here</a>
         </div>
+         <div class="text-center mt-2">
+            <a href="forgot_password.php" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+        </div>
     <?php else: ?>
         <h2 class="text-center text-4xl title mb-6 text-gray-800">Register</h2>
         <form action="register_new.php" method="post" class="flex flex-col">
